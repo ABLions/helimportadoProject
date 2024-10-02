@@ -25,8 +25,8 @@ class PreAlertaRepository implements PreAlertaRepositoryInterface
 
     public function update(array $data, $id)
     {
-        $prealerta = PreAlerta::find($id);
-        return $prealerta->update($data);
+        $prealerta = PreAlerta::findOrFail($id); // Make sure the record exists
+        return $prealerta->update($data); // Update with the validated data
     }
 
     public function delete($id)

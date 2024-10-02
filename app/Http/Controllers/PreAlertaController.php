@@ -17,60 +17,56 @@ class PreAlertaController extends Controller
     public function index()
     {
         $alertas = $this->preAlertaRepository->getAll();
-        return view('pre-alertas.index', compact('alertas'));
-    }
-
-    public function create()
-    {
-        return view('pre-alertas.create');
+        $estados = $this->preAlertaRepository->getEstados();
+        return view('pre-alertas.index', compact('alertas', 'estados'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
             'numero_seguimiento' => 'required',
-            'valor_declarado' => 'required',
+            'valor_declarado' => 'required|numeric',
             'nombre_tienda' => 'required',
             'descripcion_paquete' => 'required',
             'autorizado' => 'required',
             'instrucciones_especiales' => 'nullable',
         ]);
 
-        // Add user_id to the data
-        $data['user_id'] = 1; // Assign user_id t
-        $data['estado_id'] = 1; // Default estado_id = 1
+        $data['user_id'] = 1;
+        $data['estado_id'] = 1;
 
         $this->preAlertaRepository->create($data);
-        return redirect()->route('pre-alertas.index');
+        return redirect()->route('pre-alertas.index')->with('success', 'Pre-alerta creada con éxito.');
     }
 
     public function edit($id)
     {
         $alerta = $this->preAlertaRepository->findById($id);
-        // Fetch estados to be passed to the view
-        $estados = $this->preAlertaRepository->getEstados();
-        return view('pre-alertas.edit', compact('alerta', 'estados'));
+        return response()->json($alerta);
     }
 
     public function update(Request $request, $id)
     {
         $data = $request->validate([
             'numero_seguimiento' => 'required',
-            'valor_declarado' => 'required',
+            'valor_declarado' => 'required|numeric',
             'nombre_tienda' => 'required',
             'descripcion_paquete' => 'required',
             'autorizado' => 'required',
             'instrucciones_especiales' => 'nullable',
-            'estado' => 'required|exists:estados,id',
+            'estado_id' => 'required|exists:estados,id',
         ]);
 
+        // dd($data);
+
         $this->preAlertaRepository->update($data, $id);
-        return redirect()->route('pre-alertas.index');
+
+        return redirect()->route('pre-alertas.index')->with('success', 'Pre-alerta actualizada con éxito.');
     }
 
     public function destroy($id)
     {
         $this->preAlertaRepository->delete($id);
-        return redirect()->route('pre-alertas.index');
+        return redirect()->route('pre-alertas.index')->with('success', 'Pre-alerta eliminada con éxito.');
     }
 }

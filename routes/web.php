@@ -24,3 +24,4 @@ Route::resource('pre-alertas', PreAlertaController::class);
 // Additional routes
 Route::get('pre-alertas/{id}/edit-step', [PreAlertaController::class, 'editStep'])->name('prealerta.editStep');
 Route::get('rastreo', [TrackingController::class, 'index'])->name('rastreo.index');
+Route::get('/pre-alertas/{id}/edit', [PreAlertaController::class, 'edit'])->name('pre-alertas.edit');
