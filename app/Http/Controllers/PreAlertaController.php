@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Interfaces\PreAlertaRepositoryInterface;
+use App\Models\TrackingHistory;
+
 
 class PreAlertaController extends Controller
 {
@@ -36,6 +38,15 @@ class PreAlertaController extends Controller
         $data['estado_id'] = 1;
 
         $this->preAlertaRepository->create($data);
+
+        TrackingHistory::create([
+            'numero_seguimiento' => $data['numero_seguimiento'],
+            'user_id' => 1,// auth()->user()->id,  // Current user
+            'estado_id' => $data['estado_id'],
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         return redirect()->route('pre-alertas.index')->with('success', 'Pre-alerta creada con éxito.');
     }
 
@@ -60,6 +71,14 @@ class PreAlertaController extends Controller
         // dd($data);
 
         $this->preAlertaRepository->update($data, $id);
+
+        TrackingHistory::create([
+            'numero_seguimiento' => $data['numero_seguimiento'],
+            'user_id' => 1, //auth()->user()->id,  // Current user
+            'estado_id' => $data['estado_id'],
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         return redirect()->route('pre-alertas.index')->with('success', 'Pre-alerta actualizada con éxito.');
     }

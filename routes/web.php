@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PreAlertaController;
-
+use App\Http\Controllers\TrackingHistoryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,3 +25,7 @@ Route::resource('pre-alertas', PreAlertaController::class);
 Route::get('pre-alertas/{id}/edit-step', [PreAlertaController::class, 'editStep'])->name('prealerta.editStep');
 Route::get('rastreo', [TrackingController::class, 'index'])->name('rastreo.index');
 Route::get('/pre-alertas/{id}/edit', [PreAlertaController::class, 'edit'])->name('pre-alertas.edit');
+
+// Tracking history
+Route::get('/rastrear-envio', [TrackingHistoryController::class, 'index'])->name('tracking-history.index');
+
