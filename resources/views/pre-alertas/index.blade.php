@@ -39,10 +39,10 @@
                             <i class="fas fa-edit"></i>
                         </a>
 
-                        <form action="{{ route('pre-alertas.destroy', $alerta->id) }}" method="POST" style="display:inline;">
+                        <form id="delete-form-{{ $alerta->id }}" action="{{ route('pre-alertas.destroy', $alerta->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar esta alerta?');">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ $alerta->id }})">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </form>
@@ -157,6 +157,24 @@
             $('#alertaForm')[0].reset();
             $('#estadoSelect').hide();
         }
+    }
+
+    function confirmDelete(alertaId) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit the delete form
+                document.getElementById('delete-form-' + alertaId).submit();
+            }
+        });
     }
 </script>
 @endsection
